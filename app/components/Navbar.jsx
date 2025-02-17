@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef, useContext } from "react";
 import Link from "next/link";
-import { auth } from "../firebaseConfig";
 import { signOut } from "firebase/auth";
 import {
   FaEdit,
@@ -22,6 +21,7 @@ import { useRouter } from "next/navigation";
 import ThemeContext from "../ThemeContext";
 import { motion, AnimatePresence } from "framer-motion"; // Import framer-motion for animations
 import UserContext from "../UserContext";
+import { auth } from "../FirebaseConfig";
 
 const Navbar = () => {
   const router = useRouter();
