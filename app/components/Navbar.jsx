@@ -355,7 +355,7 @@ const Navbar = () => {
                 </span>
               </Link>
 
-              <Link href="/userchat">
+              <Link href="/userChat">
                 <span
                   className={`flex items-center py-4 text-xl md:text-2xl font-semibold ${
                     activeLink === "services"
@@ -374,7 +374,7 @@ const Navbar = () => {
                 </span>
               </Link>
 
-              <Link href="/aidoctor">
+              <Link href="/aiDoctor">
                 <span
                   className={`flex items-center py-4 text-xl md:text-2xl font-semibold ${
                     activeLink === "Consultant"
@@ -384,7 +384,7 @@ const Navbar = () => {
                       : "text-gray-900"
                   }`}
                   onClick={() => {
-                    setActiveLink("Consultant");
+                    setActiveLink("aidoctor");
                     toggleMobileMenu(); // Close menu on click
                   }}
                 >
