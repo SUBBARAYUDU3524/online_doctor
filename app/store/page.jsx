@@ -8,7 +8,7 @@ import ThemeContext from "../ThemeContext";
 const Store = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { addItemToCart } = useContext(UserContext);
-  const theme = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   // Sample product data
   const products = [
@@ -52,6 +52,126 @@ const Store = () => {
       rating: 4.5,
       reviews: 1600,
     },
+    {
+      id: 5,
+      name: "Paracetamol",
+      image: product1,
+      price: "₹120",
+      originalPrice: "₹200",
+      discount: "40% off",
+      rating: 4.2,
+      reviews: 1250,
+    },
+    {
+      id: 6,
+      name: "Vitamin C Tablets",
+      image: product1,
+      price: "₹120",
+      originalPrice: "₹180",
+      discount: "33% off",
+      rating: 4.0,
+      reviews: 980,
+    },
+    {
+      id: 7,
+      name: "Cough Syrup",
+      image: product1,
+      price: "₹80",
+      originalPrice: "₹150",
+      discount: "47% off",
+      rating: 3.9,
+      reviews: 700,
+    },
+    {
+      id: 8,
+      name: "Pain Relief Spray",
+      image: product1,
+      price: "₹150",
+      originalPrice: "₹220",
+      discount: "32% off",
+      rating: 4.5,
+      reviews: 1600,
+    },
+    {
+      id: 9,
+      name: "Paracetamol",
+      image: product1,
+      price: "₹120",
+      originalPrice: "₹200",
+      discount: "40% off",
+      rating: 4.2,
+      reviews: 1250,
+    },
+    {
+      id: 10,
+      name: "Vitamin C Tablets",
+      image: product1,
+      price: "₹120",
+      originalPrice: "₹180",
+      discount: "33% off",
+      rating: 4.0,
+      reviews: 980,
+    },
+    {
+      id: 11,
+      name: "Cough Syrup",
+      image: product1,
+      price: "₹80",
+      originalPrice: "₹150",
+      discount: "47% off",
+      rating: 3.9,
+      reviews: 700,
+    },
+    {
+      id: 12,
+      name: "Pain Relief Spray",
+      image: product1,
+      price: "₹150",
+      originalPrice: "₹220",
+      discount: "32% off",
+      rating: 4.5,
+      reviews: 1600,
+    },
+    {
+      id: 13,
+      name: "Paracetamol",
+      image: product1,
+      price: "₹120",
+      originalPrice: "₹200",
+      discount: "40% off",
+      rating: 4.2,
+      reviews: 1250,
+    },
+    {
+      id: 14,
+      name: "Vitamin C Tablets",
+      image: product1,
+      price: "₹120",
+      originalPrice: "₹180",
+      discount: "33% off",
+      rating: 4.0,
+      reviews: 980,
+    },
+    {
+      id: 15,
+      name: "Cough Syrup",
+      image: product1,
+      price: "₹80",
+      originalPrice: "₹150",
+      discount: "47% off",
+      rating: 3.9,
+      reviews: 700,
+    },
+    {
+      id: 16,
+      name: "Pain Relief Spray",
+      image: product1,
+      price: "₹150",
+      originalPrice: "₹220",
+      discount: "32% off",
+      rating: 4.5,
+      reviews: 1600,
+    },
   ];
 
   // Filter products based on search input
@@ -62,7 +182,9 @@ const Store = () => {
   return (
     <div
       className={`min-h-screen ${
-        theme === "dark" ? "bg-black text-white" : "bg-white text-black"
+        theme === "dark"
+          ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white"
+          : "bg-gradient-to-br from-white to-blue-200 text-gray-900"
       }`}
     >
       {/* Heading Section */}
@@ -93,7 +215,7 @@ const Store = () => {
               key={product.id}
               className={`border p-4 rounded-lg shadow-md ${
                 theme === "dark"
-                  ? "bg-gray-800 border-gray-700 text-white"
+                  ? "bg-black border-gray-700 text-white"
                   : "bg-gray-100 border-gray-300 text-black"
               }`}
             >

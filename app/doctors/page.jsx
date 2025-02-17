@@ -11,8 +11,19 @@ import {
   doc,
   setDoc,
 } from "firebase/firestore";
+import { AiOutlineArrowLeft } from "react-icons/ai"; // For back arrow icon
 import UserContext from "../UserContext";
 import { db } from "../FirebaseConfig";
+import ThemeContext from "../ThemeContext";
+
+// Helper function to get the initials
+const getInitials = (name) => {
+  const nameArray = name.split(" ");
+  const initials = nameArray
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("");
+  return initials;
+};
 
 const ChatApp = () => {
   const [userType, setUserType] = useState("");
@@ -20,9 +31,10 @@ const ChatApp = () => {
   const [selectedContact, setSelectedContact] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [isChatOpen, setIsChatOpen] = useState(false); // Track chat screen state
   const { currentUser } = useContext(UserContext);
-  console.log(contacts, "contacts");
-  console.log("currentuser", currentUser);
+  const { theme } = useContext(ThemeContext); // Access the theme context
+
   useEffect(() => {
     const determineUserType = async () => {
       if (!currentUser || !currentUser.email) return;
@@ -130,29 +142,102 @@ const ChatApp = () => {
     }
   };
 
+  const handleContactClick = (contact) => {
+    setSelectedContact(contact);
+    setIsChatOpen(true); // Open the chat view on contact click
+  };
+
+  const handleBackClick = () => {
+    setSelectedContact(null);
+    setIsChatOpen(false); // Close the chat view and show contacts
+  };
+
   return (
-    <div className="h-screen flex">
-      <div className="w-1/3 border-r border-gray-300 overflow-y-auto">
+    <div
+      className={`h-screen flex flex-col md:flex-row ${
+        theme === "dark"
+          ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white"
+          : "bg-gradient-to-br from-white to-blue-200 text-gray-900"
+      }`}
+    >
+      {/* Contact List for Desktop */}
+      <div
+        className={`w-full md:w-1/3 border-b md:border-r border-gray-300 overflow-y-auto md:block ${
+          isChatOpen ? "hidden" : ""
+        }`}
+      >
         {contacts.map((contact) => (
           <div
             key={contact.id}
-            onClick={() => setSelectedContact(contact)}
-            className="p-4 cursor-pointer border-b border-gray-300 hover:bg-gray-100"
+            onClick={() => handleContactClick(contact)}
+            className={`p-4 cursor-pointer border-b border-gray-300 hover:bg-gray-100 flex items-center ${
+              theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100"
+            }`}
           >
-            {contact.data.userType === "doctor"
-              ? contact.data.doctorName
-              : contact.data.username}
+            <div
+              className={`w-10 h-10 rounded-full  flex items-center justify-center text-white font-bold mr-4 ${
+                theme === "dark" ? "bg-gray-600" : "bg-gray-300"
+              }`}
+            >
+              {getInitials(
+                contact.data.userType === "doctor"
+                  ? contact.data.doctorName
+                  : contact.data.username
+              )}
+            </div>
+            <span>
+              {contact.data.userType === "doctor"
+                ? contact.data.doctorName
+                : contact.data.username}
+            </span>
           </div>
         ))}
       </div>
-      <div className="w-2/3 flex flex-col">
+
+      {/* Chat Screen */}
+      <div className="w-full md:w-2/3 flex flex-col">
         {selectedContact ? (
           <>
-            <div className="p-4 border-b border-gray-300 bg-gray-100">
-              {selectedContact.data.userType === "doctor"
-                ? selectedContact.data.doctorName
-                : selectedContact.data.username}
+            {/* Back Button on Mobile */}
+            <div className="md:hidden p-4 flex items-center">
+              <button
+                onClick={handleBackClick}
+                className={`text-xl flex items-center ${
+                  theme === "dark" ? "text-blue-400" : "text-blue-500"
+                }`}
+              >
+                <AiOutlineArrowLeft className="mr-2" />
+                Back to Contacts
+              </button>
             </div>
+
+            {/* Chat Header */}
+            <div
+              className={`p-4 border-b border-gray-300 flex items-center ${
+                theme === "dark"
+                  ? "bg-gray-700"
+                  : "bg-gradient-to-br from-white to-blue-200 "
+              }`}
+            >
+              <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mr-4 ${
+                  theme === "dark" ? "bg-gray-600" : "bg-gray-300"
+                }`}
+              >
+                {getInitials(
+                  selectedContact.data.userType === "doctor"
+                    ? selectedContact.data.doctorName
+                    : selectedContact.data.username
+                )}
+              </div>
+              <span className="text-xl font-semibold">
+                {selectedContact.data.userType === "doctor"
+                  ? selectedContact.data.doctorName
+                  : selectedContact.data.username}
+              </span>
+            </div>
+
+            {/* Chat Messages */}
             <div className="flex-1 p-4 overflow-y-auto">
               {messages.map((msg, index) => (
                 <div
@@ -175,16 +260,26 @@ const ChatApp = () => {
                 </div>
               ))}
             </div>
-            <div className="p-4 border-t border-gray-300 flex">
+
+            {/* Message Input */}
+            <div
+              className={`p-4 border-t border-gray-300 flex ${
+                theme === "dark" ? "bg-gray-800" : "bg-white"
+              }`}
+            >
               <input
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                className="flex-1 p-2 border border-gray-300 rounded mr-2"
+                className={`flex-1 p-2 border border-gray-300 rounded mr-2 ${
+                  theme === "dark" ? "bg-gray-700" : "bg-white"
+                }`}
               />
               <button
                 onClick={sendMessage}
-                className="p-2 bg-blue-500 text-white rounded"
+                className={`p-2 ${
+                  theme === "dark" ? "bg-blue-500" : "bg-blue-500"
+                } text-white rounded`}
               >
                 Send
               </button>
