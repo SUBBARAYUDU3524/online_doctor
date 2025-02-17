@@ -16,7 +16,9 @@ const Footer = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
               {/* Company Info */}
               <div>
-                <h3 className="text-2xl font-bold mb-3">ERRTEKNALOZY</h3>
+                <h3 className="text-2xl font-bold mb-3">
+                  Online Doctor Service
+                </h3>
                 <p>Learn Skills that make you Job-Ready!</p>
               </div>
 
@@ -110,7 +112,7 @@ const Footer = () => {
             {/* Footer Bottom */}
             <div className="border-t border-gray-700 mt-8 pt-4 text-center">
               <p className="text-gray-400">
-                &copy; {new Date().getFullYear()} Errteknalozy Innovations. All
+                &copy; {new Date().getFullYear()} Online Doctor Innovations. All
                 rights reserved.
               </p>
               <div className="flex justify-center space-x-4 mt-3">

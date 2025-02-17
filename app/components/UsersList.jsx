@@ -39,7 +39,7 @@ const UsersList = ({ onSelectUser, currentUser }) => {
   };
 
   return (
-    <div className="h-full p-4">
+    <div className="h-full p-4 hidden md:block lg:block">
       <h2 className="text-xl font-bold mb-4">Users</h2>
       <ul className="h-full md:overflow-y-auto">
         {users.map((user) => (

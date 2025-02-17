@@ -1,6 +1,15 @@
 "use client";
 import React, { useState, useContext } from "react";
-import product1 from "../assets/home1.jpg";
+import Image from "next/image";
+import product1 from "../assets/store1.jpg";
+import product2 from "../assets/store2.jpg";
+import product3 from "../assets/store3.jpg";
+import product4 from "../assets/store4.jpg";
+import product5 from "../assets/store5.jpg";
+import product6 from "../assets/store6.jpg";
+import product7 from "../assets/store7.jpg";
+import product8 from "../assets/store8.jpg";
+import product9 from "../assets/store9.jpg";
 import UserContext from "../UserContext";
 import { FaStar } from "react-icons/fa";
 import ThemeContext from "../ThemeContext";
@@ -15,7 +24,7 @@ const Store = () => {
     {
       id: 1,
       name: "Paracetamol",
-      image: product1,
+      image: product3,
       price: "₹120",
       originalPrice: "₹200",
       discount: "40% off",
@@ -25,7 +34,7 @@ const Store = () => {
     {
       id: 2,
       name: "Vitamin C Tablets",
-      image: product1,
+      image: product2,
       price: "₹120",
       originalPrice: "₹180",
       discount: "33% off",
@@ -45,7 +54,7 @@ const Store = () => {
     {
       id: 4,
       name: "Pain Relief Spray",
-      image: product1,
+      image: product4,
       price: "₹150",
       originalPrice: "₹220",
       discount: "32% off",
@@ -55,7 +64,7 @@ const Store = () => {
     {
       id: 5,
       name: "Paracetamol",
-      image: product1,
+      image: product5,
       price: "₹120",
       originalPrice: "₹200",
       discount: "40% off",
@@ -65,7 +74,7 @@ const Store = () => {
     {
       id: 6,
       name: "Vitamin C Tablets",
-      image: product1,
+      image: product6,
       price: "₹120",
       originalPrice: "₹180",
       discount: "33% off",
@@ -75,7 +84,7 @@ const Store = () => {
     {
       id: 7,
       name: "Cough Syrup",
-      image: product1,
+      image: product7,
       price: "₹80",
       originalPrice: "₹150",
       discount: "47% off",
@@ -85,7 +94,7 @@ const Store = () => {
     {
       id: 8,
       name: "Pain Relief Spray",
-      image: product1,
+      image: product8,
       price: "₹150",
       originalPrice: "₹220",
       discount: "32% off",
@@ -95,7 +104,7 @@ const Store = () => {
     {
       id: 9,
       name: "Paracetamol",
-      image: product1,
+      image: product9,
       price: "₹120",
       originalPrice: "₹200",
       discount: "40% off",
@@ -125,7 +134,7 @@ const Store = () => {
     {
       id: 12,
       name: "Pain Relief Spray",
-      image: product1,
+      image: product2,
       price: "₹150",
       originalPrice: "₹220",
       discount: "32% off",
@@ -135,7 +144,7 @@ const Store = () => {
     {
       id: 13,
       name: "Paracetamol",
-      image: product1,
+      image: product4,
       price: "₹120",
       originalPrice: "₹200",
       discount: "40% off",
@@ -145,7 +154,7 @@ const Store = () => {
     {
       id: 14,
       name: "Vitamin C Tablets",
-      image: product1,
+      image: product3,
       price: "₹120",
       originalPrice: "₹180",
       discount: "33% off",
@@ -155,7 +164,7 @@ const Store = () => {
     {
       id: 15,
       name: "Cough Syrup",
-      image: product1,
+      image: product2,
       price: "₹80",
       originalPrice: "₹150",
       discount: "47% off",
@@ -220,11 +229,15 @@ const Store = () => {
               }`}
             >
               {/* Product Image */}
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-40 object-cover rounded-md"
-              />
+              <div className="w-full h-40 relative">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-md"
+                />
+              </div>
 
               {/* Product Title */}
               <h2 className="text-lg font-semibold mt-2">{product.name}</h2>

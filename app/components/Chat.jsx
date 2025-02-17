@@ -110,7 +110,7 @@ const Chat = ({ selectedUser, currentUser }) => {
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full w-full">
       <div className="flex items-center p-4 bg-gray-300">
         <img
           src={

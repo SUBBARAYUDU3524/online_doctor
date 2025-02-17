@@ -13,8 +13,8 @@ import {
 } from "firebase/firestore";
 import { AiOutlineArrowLeft } from "react-icons/ai"; // For back arrow icon
 import UserContext from "../UserContext";
-import { db } from "../FirebaseConfig";
 import ThemeContext from "../ThemeContext";
+import { db } from "../FirebaseConfig";
 
 // Helper function to get the initials
 const getInitials = (name) => {
@@ -32,8 +32,9 @@ const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false); // Track chat screen state
+
   const { currentUser } = useContext(UserContext);
-  const { theme } = useContext(ThemeContext); // Access the theme context
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     const determineUserType = async () => {
@@ -62,6 +63,7 @@ const ChatApp = () => {
   }, [currentUser]);
 
   useEffect(() => {
+    // If user is a "user", fetch all doctors
     if (userType === "user") {
       const unsubscribe = onSnapshot(collection(db, "doctors"), (snapshot) => {
         setContacts(
@@ -69,7 +71,9 @@ const ChatApp = () => {
         );
       });
       return () => unsubscribe();
-    } else if (userType === "doctor" && currentUser && currentUser?.uid) {
+    }
+    // If user is a "doctor", fetch all users who have a conversation with this doctor
+    else if (userType === "doctor" && currentUser && currentUser?.uid) {
       const conversationsRef = collection(db, "conversations");
       const q = query(
         conversationsRef,
@@ -100,6 +104,7 @@ const ChatApp = () => {
   }, [userType, currentUser]);
 
   useEffect(() => {
+    // Fetch messages for the selected conversation
     if (selectedContact && currentUser && currentUser.uid) {
       const conversationId = getConversationId(
         currentUser.uid,
@@ -128,11 +133,13 @@ const ChatApp = () => {
         currentUser.uid,
         selectedContact.id
       );
+      // Ensure a conversation document exists
       await setDoc(doc(db, "conversations", conversationId), {
         userId: userType === "user" ? currentUser.uid : selectedContact.id,
         doctorId: userType === "doctor" ? currentUser.uid : selectedContact.id,
         updatedAt: new Date(),
       });
+      // Add the message
       await addDoc(collection(db, "messages", conversationId, "chat"), {
         senderId: currentUser.uid,
         message: newMessage,
@@ -144,153 +151,218 @@ const ChatApp = () => {
 
   const handleContactClick = (contact) => {
     setSelectedContact(contact);
-    setIsChatOpen(true); // Open the chat view on contact click
+    setIsChatOpen(true); // Open the chat view on mobile
   };
 
   const handleBackClick = () => {
     setSelectedContact(null);
-    setIsChatOpen(false); // Close the chat view and show contacts
+    setIsChatOpen(false); // Go back to contact list on mobile
+  };
+
+  // (A) SIDEBAR COMPONENT
+  const renderSidebar = () => {
+    return (
+      <div
+        className={`flex flex-col w-full md:w-1/3 h-full lg:w-full lg:mr-3 ${
+          theme === "dark" ? "bg-gray-800" : "bg-gray-100"
+        }`}
+      >
+        {/* (1) Current User Profile at top */}
+        <div
+          className={`flex items-center p-4 border-b border-gray-300 ${
+            theme === "dark" ? "bg-gray-700" : "bg-gray-200"
+          }`}
+        >
+          {/* If you have a photo URL for the current user, place it here */}
+          <div
+            className={`w-12 h-12 rounded-full mr-3 flex items-center justify-center text-white font-bold ${
+              theme === "dark" ? "bg-gray-500" : "bg-gray-400"
+            }`}
+          >
+            {getInitials(currentUser?.displayName || "User")}
+          </div>
+          <div className="flex flex-col">
+            <span className="font-semibold text-lg">
+              {currentUser?.displayName || currentUser?.email || "User"}
+            </span>
+            <span className="text-sm text-gray-600">
+              {userType === "doctor" ? "Doctor" : "User"}
+            </span>
+          </div>
+        </div>
+
+        {/* (2) Search Bar */}
+        <div className="p-2 border-b border-gray-300">
+          <input
+            type="text"
+            placeholder="Search or start new chat"
+            className="w-full p-2 rounded outline-none border text-sm"
+          />
+        </div>
+
+        {/* (3) Contact List */}
+        <div className="flex-1 overflow-y-auto">
+          {contacts.length === 0 ? (
+            <div className="p-4 text-center text-gray-500">No Contacts</div>
+          ) : (
+            contacts.map((contact) => {
+              const displayName =
+                contact.data.userType === "doctor"
+                  ? contact.data.doctorName
+                  : contact.data.username;
+              return (
+                <div
+                  key={contact.id}
+                  onClick={() => handleContactClick(contact)}
+                  className={`p-4 cursor-pointer flex items-center border-b border-gray-300 ${
+                    theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
+                  }`}
+                >
+                  <div
+                    className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold mr-4 ${
+                      theme === "dark" ? "bg-gray-600" : "bg-gray-400"
+                    }`}
+                  >
+                    {getInitials(displayName)}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-medium text-lg">{displayName}</span>
+                    <span className="text-sm text-gray-500">
+                      {contact.data.specialization} Specialist
+                    </span>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // (B) CHAT PANEL COMPONENT
+  const renderChatPanel = () => {
+    if (!selectedContact) {
+      return (
+        <div
+          className={`flex-1 flex items-center justify-center min-h-screen ${
+            theme === "dark" ? "bg-gray-900" : "bg-white"
+          }`}
+        >
+          Select a contact to start chatting
+        </div>
+      );
+    }
+
+    const contactDisplayName =
+      selectedContact.data.userType === "doctor"
+        ? selectedContact.data.doctorName
+        : selectedContact.data.username;
+
+    return (
+      <div className="flex flex-col w-full h-full">
+        {/* Chat Header */}
+        <div
+          className={`p-4 border-b border-gray-300 flex items-center justify-between ${
+            theme === "dark" ? "bg-gray-700 text-white" : "bg-gray-100"
+          }`}
+        >
+          {/* Back button for mobile screens */}
+          <div className="flex items-center">
+            <button
+              onClick={handleBackClick}
+              className={`md:hidden mr-4 text-xl ${
+                theme === "dark" ? "text-blue-300" : "text-blue-600"
+              }`}
+            >
+              <AiOutlineArrowLeft />
+            </button>
+
+            <div
+              className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold mr-3 ${
+                theme === "dark" ? "bg-gray-600" : "bg-gray-400"
+              }`}
+            >
+              {getInitials(contactDisplayName)}
+            </div>
+            <span className="font-semibold text-lg">{contactDisplayName}</span>
+          </div>
+          {/* Optional icons could go on the right side (like WhatsApp) */}
+        </div>
+
+        {/* Messages Area */}
+        <div
+          className={`flex-1 overflow-y-auto p-4 ${
+            theme === "dark" ? "bg-gray-900" : "bg-white"
+          }`}
+        >
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`mb-2 flex ${
+                msg.senderId === currentUser.uid
+                  ? "justify-end"
+                  : "justify-start"
+              }`}
+            >
+              <div
+                className={`max-w-[70%] md:max-w-md p-2 rounded-lg text-sm ${
+                  msg.senderId === currentUser.uid
+                    ? "bg-blue-500 text-white"
+                    : theme === "dark"
+                    ? "bg-gray-700 text-white"
+                    : "bg-gray-200"
+                }`}
+              >
+                {msg.message}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Message Input */}
+        <div
+          className={`p-3 border-t border-gray-300 flex items-center ${
+            theme === "dark" ? "bg-gray-800" : "bg-gray-50"
+          }`}
+        >
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type a message"
+            className={`flex-1 p-2 rounded border text-sm mr-2 outline-none ${
+              theme === "dark"
+                ? "bg-gray-700 text-white border-gray-600"
+                : "bg-white border-gray-300"
+            }`}
+          />
+          <button
+            onClick={sendMessage}
+            className={`px-4 py-2 rounded text-white ${
+              theme === "dark" ? "bg-blue-600" : "bg-blue-500"
+            }`}
+          >
+            Send
+          </button>
+        </div>
+      </div>
+    );
   };
 
   return (
     <div
-      className={`h-screen flex flex-col md:flex-row ${
-        theme === "dark"
-          ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white"
-          : "bg-gradient-to-br from-white to-blue-200 text-gray-900"
+      className={`h-screen w-full flex flex-col md:flex-row ${
+        theme === "dark" ? "text-white" : "text-gray-900"
       }`}
     >
-      {/* Contact List for Desktop */}
-      <div
-        className={`w-full md:w-1/3 border-b md:border-r border-gray-300 overflow-y-auto md:block ${
-          isChatOpen ? "hidden" : ""
-        }`}
-      >
-        {contacts.map((contact) => (
-          <div
-            key={contact.id}
-            onClick={() => handleContactClick(contact)}
-            className={`p-4 cursor-pointer border-b border-gray-300 hover:bg-gray-100 flex items-center ${
-              theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100"
-            }`}
-          >
-            <div
-              className={`w-10 h-10 rounded-full  flex items-center justify-center text-white font-bold mr-4 ${
-                theme === "dark" ? "bg-gray-600" : "bg-gray-300"
-              }`}
-            >
-              {getInitials(
-                contact.data.userType === "doctor"
-                  ? contact.data.doctorName
-                  : contact.data.username
-              )}
-            </div>
-            <span>
-              {contact.data.userType === "doctor"
-                ? contact.data.doctorName
-                : contact.data.username}
-            </span>
-          </div>
-        ))}
+      {/* SIDEBAR (Hidden on mobile if chat is open) */}
+      <div className={`md:flex ${isChatOpen ? "hidden" : "flex"} h-full`}>
+        {renderSidebar()}
       </div>
 
-      {/* Chat Screen */}
-      <div className="w-full md:w-2/3 flex flex-col">
-        {selectedContact ? (
-          <>
-            {/* Back Button on Mobile */}
-            <div className="md:hidden p-4 flex items-center">
-              <button
-                onClick={handleBackClick}
-                className={`text-xl flex items-center ${
-                  theme === "dark" ? "text-blue-400" : "text-blue-500"
-                }`}
-              >
-                <AiOutlineArrowLeft className="mr-2" />
-                Back to Contacts
-              </button>
-            </div>
-
-            {/* Chat Header */}
-            <div
-              className={`p-4 border-b border-gray-300 flex items-center ${
-                theme === "dark"
-                  ? "bg-gray-700"
-                  : "bg-gradient-to-br from-white to-blue-200 "
-              }`}
-            >
-              <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mr-4 ${
-                  theme === "dark" ? "bg-gray-600" : "bg-gray-300"
-                }`}
-              >
-                {getInitials(
-                  selectedContact.data.userType === "doctor"
-                    ? selectedContact.data.doctorName
-                    : selectedContact.data.username
-                )}
-              </div>
-              <span className="text-xl font-semibold">
-                {selectedContact.data.userType === "doctor"
-                  ? selectedContact.data.doctorName
-                  : selectedContact.data.username}
-              </span>
-            </div>
-
-            {/* Chat Messages */}
-            <div className="flex-1 p-4 overflow-y-auto">
-              {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`mb-4 ${
-                    msg.senderId === currentUser.uid
-                      ? "text-right"
-                      : "text-left"
-                  }`}
-                >
-                  <div
-                    className={`inline-block p-2 rounded ${
-                      msg.senderId === currentUser.uid
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200"
-                    }`}
-                  >
-                    {msg.message}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Message Input */}
-            <div
-              className={`p-4 border-t border-gray-300 flex ${
-                theme === "dark" ? "bg-gray-800" : "bg-white"
-              }`}
-            >
-              <input
-                type="text"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                className={`flex-1 p-2 border border-gray-300 rounded mr-2 ${
-                  theme === "dark" ? "bg-gray-700" : "bg-white"
-                }`}
-              />
-              <button
-                onClick={sendMessage}
-                className={`p-2 ${
-                  theme === "dark" ? "bg-blue-500" : "bg-blue-500"
-                } text-white rounded`}
-              >
-                Send
-              </button>
-            </div>
-          </>
-        ) : (
-          <div className="flex-1 flex items-center justify-center">
-            Select a contact to start chatting
-          </div>
-        )}
-      </div>
+      {/* CHAT PANEL */}
+      <div className="flex-1 h-full">{renderChatPanel()}</div>
     </div>
   );
 };

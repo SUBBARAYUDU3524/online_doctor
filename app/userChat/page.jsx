@@ -4,6 +4,7 @@ import UsersList from "../components/UsersList";
 import Chat from "../components/Chat";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { FaArrowLeft } from "react-icons/fa"; // You can use any icon for the back arrow
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const MainComponent = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -48,13 +49,13 @@ const MainComponent = () => {
         {selectedUser ? (
           <>
             {/* Back Arrow and Text */}
-            <div className="p-4 flex items-center">
+            {/* Back button for mobile screens */}
+            <div className="flex items-center">
               <button
                 onClick={handleBackClick}
-                className="mr-4 text-xl text-blue-500 flex items-center"
+                className={`md:hidden mr-4 text-xl `}
               >
-                <FaArrowLeft /> {/* Back arrow */}
-                <span className="ml-2">Back to Contacts</span> {/* Text */}
+                <AiOutlineArrowLeft />
               </button>
             </div>
             <Chat selectedUser={selectedUser} currentUser={currentUser} />

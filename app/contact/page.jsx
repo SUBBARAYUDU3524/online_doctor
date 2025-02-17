@@ -60,7 +60,7 @@ const ContactPage = () => {
       >
         {/* Top Section: Background Image with Heading */}
         <div className="relative flex flex-col items-center pt-5 pl-5 pr-5 md:pl-10 md:pr-10 lg:pl-32 lg:pr-32 min-h-screen">
-          <div className="relative w-full h-[50vh]">
+          <div className="relative w-full h-[30vh] md:h-[50vh]">
             <Image
               src={img1}
               alt="Contact"
@@ -70,14 +70,14 @@ const ContactPage = () => {
               className="brightness-50"
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <h1 className="text-7xl font-bold text-white text-center">
+              <h1 className="text-4xl md:text-7xl font-bold text-white text-center">
                 Contact Us
               </h1>
             </div>
           </div>
 
           {/* Contact Details Section */}
-          <div className="pt-10 pb-10">
+          <div className="pt-5 md:pt-10 pb-10">
             <motion.div
               className={`flex flex-col p-5 md:p-10 ${
                 theme === "dark"
@@ -94,22 +94,24 @@ const ContactPage = () => {
             >
               {/* Left Section: Contact Information */}
               <div
-                className={`md:w-1/2 w-full p-5 flex flex-col justify-center space-y-8 ${
+                className={`md:w-1/2 w-full p-5 flex flex-col justify-center space-y-4 md:space-y-8 ${
                   theme === "dark" ? "bg-gray-800 text-gray-200" : "bg-gray-100"
                 }`}
               >
-                <h2 className="text-4xl font-bold">Always Here to Help You</h2>
-                <p className="text-lg">
+                <h2 className="text-2xl md:text-4xl font-bold">
+                  Always Here to Help You
+                </h2>
+                <p className="text-base md:text-lg">
                   Rest assured that we are perpetually available and committed
                   to providing you with the assistance you need.
                 </p>
 
                 {/* Location */}
-                <div className="flex items-center space-x-4">
-                  <FiMapPin className="text-blue-500 text-4xl" />
+                <div className="flex items-center space-x-2 md:space-x-4">
+                  <FiMapPin className="text-blue-500 text-2xl md:text-4xl" />
                   <div>
-                    <h3 className="text-lg font-bold">Location</h3>
-                    <p>
+                    <h3 className="text-base md:text-lg font-bold">Location</h3>
+                    <p className="text-sm md:text-base">
                       #235, 2nd & 3rd Floor, Indira Nagar II Stage, Bengaluru,
                       Karnataka 560038
                     </p>
@@ -117,30 +119,34 @@ const ContactPage = () => {
                 </div>
 
                 {/* Contact */}
-                <div className="flex items-center space-x-4">
-                  <FiPhone className="text-blue-500 text-4xl" />
+                <div className="flex items-center space-x-2 md:space-x-4">
+                  <FiPhone className="text-blue-500 text-2xl md:text-4xl" />
                   <div>
-                    <h3 className="text-lg font-bold">Contact</h3>
-                    <p>+919731910827</p>
+                    <h3 className="text-base md:text-lg font-bold">Contact</h3>
+                    <p className="text-sm md:text-base">+919731910827</p>
                   </div>
                 </div>
 
                 {/* Email */}
-                <div className="flex items-center space-x-4">
-                  <FiMail className="text-blue-500 text-4xl" />
+                <div className="flex items-center space-x-2 md:space-x-4">
+                  <FiMail className="text-blue-500 text-2xl md:text-4xl" />
                   <div>
-                    <h3 className="text-lg font-bold">Email</h3>
-                    <p>support@campalin.com</p>
+                    <h3 className="text-base md:text-lg font-bold">Email</h3>
+                    <p className="text-sm md:text-base">support@campalin.com</p>
                   </div>
                 </div>
 
                 {/* Hours of Operation */}
-                <div className="flex items-center space-x-4">
-                  <FiClock className="text-blue-500 text-4xl" />
+                <div className="flex items-center space-x-2 md:space-x-4">
+                  <FiClock className="text-blue-500 text-2xl md:text-4xl" />
                   <div>
-                    <h3 className="text-lg font-bold">Hours of Operation</h3>
-                    <p>Tue–Sun: 10:00AM – 7:30PM</p>
-                    <p>Monday: Holiday</p>
+                    <h3 className="text-base md:text-lg font-bold">
+                      Hours of Operation
+                    </h3>
+                    <p className="text-sm md:text-base">
+                      Tue–Sun: 10:00AM – 7:30PM
+                    </p>
+                    <p className="text-sm md:text-base">Monday: Holiday</p>
                   </div>
                 </div>
               </div>
@@ -151,10 +157,10 @@ const ContactPage = () => {
                   theme === "dark" ? "bg-gray-900" : "bg-gray-50"
                 }`}
               >
-                <h2 className="text-4xl font-bold mb-6">
+                <h2 className="text-2xl md:text-4xl font-bold mb-6">
                   Ready To Get Started?
                 </h2>
-                <p className="mb-6">
+                <p className="mb-6 text-sm md:text-base">
                   Your email address will not be published. Required fields are
                   marked.
                 </p>
@@ -245,7 +251,7 @@ const ContactPage = () => {
                       id="accept"
                       className="h-5 w-5 text-blue-500 focus:ring-0 focus:outline-none"
                     />
-                    <label htmlFor="accept">
+                    <label htmlFor="accept" className="text-sm md:text-base">
                       Accept{" "}
                       <a href="#" className="text-blue-400 underline">
                         terms
@@ -260,7 +266,7 @@ const ContactPage = () => {
 
                   <button
                     type="submit"
-                    className={`w-full px-6 py-3 font-bold rounded-md ${
+                    className={`w-full px-4 py-2 md:px-6 md:py-3 font-bold rounded-md ${
                       theme === "dark"
                         ? "bg-gray-800 text-gray-200 hover:bg-gray-600 hover:text-white"
                         : "bg-gray-200 text-gray-800 hover:bg-gray-400 hover:text-black"
@@ -274,7 +280,7 @@ const ContactPage = () => {
 
             {/* Map Section */}
             <motion.div
-              className="w-full pt-10 flex flex-col items-center  md:px-10"
+              className="w-full pt-5 md:pt-10 flex flex-col items-center px-2 md:px-10"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: false, amount: 0.3 }} // Trigger at 30% visibility
@@ -284,24 +290,24 @@ const ContactPage = () => {
               }}
             >
               <div
-                className={` rounded-lg shadow-lg p-6 md:p-10 w-full ${
+                className={`rounded-lg shadow-lg p-4 md:p-6 w-full ${
                   theme === "dark"
                     ? "bg-gray-900 text-gray-200"
                     : "bg-white text-black"
                 }`}
               >
-                <h2 className="text-3xl font-bold text-center mb-4 text-gray-900 dark:text-gray-100">
+                <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
                   Our Location
                 </h2>
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.1011861836965!2d78.80720521482198!3d14.748186689712224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb3f3f21ba1e87b%3A0x143607ef508f44f9!2sBadvel%2C%20Andhra%20Pradesh%20516447!5e0!3m2!1sen!2sin!4v1633520576359!5m2!1sen!2sin"
                   width="100%"
-                  height="450"
+                  height="300"
+                  className="rounded-lg"
                   style={{ border: 0 }}
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  className="rounded-lg"
                   title="Company Location"
                 ></iframe>
               </div>
