@@ -1,0 +1,146 @@
+"use client";
+import React, { useState, useContext } from "react";
+import product1 from "../assets/home1.jpg";
+import UserContext from "../UserContext";
+import { FaStar } from "react-icons/fa";
+import ThemeContext from "../ThemeContext";
+
+const Store = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const { addItemToCart } = useContext(UserContext);
+  const theme = useContext(ThemeContext);
+
+  // Sample product data
+  const products = [
+    {
+      id: 1,
+      name: "Paracetamol",
+      image: product1,
+      price: "₹120",
+      originalPrice: "₹200",
+      discount: "40% off",
+      rating: 4.2,
+      reviews: 1250,
+    },
+    {
+      id: 2,
+      name: "Vitamin C Tablets",
+      image: product1,
+      price: "₹120",
+      originalPrice: "₹180",
+      discount: "33% off",
+      rating: 4.0,
+      reviews: 980,
+    },
+    {
+      id: 3,
+      name: "Cough Syrup",
+      image: product1,
+      price: "₹80",
+      originalPrice: "₹150",
+      discount: "47% off",
+      rating: 3.9,
+      reviews: 700,
+    },
+    {
+      id: 4,
+      name: "Pain Relief Spray",
+      image: product1,
+      price: "₹150",
+      originalPrice: "₹220",
+      discount: "32% off",
+      rating: 4.5,
+      reviews: 1600,
+    },
+  ];
+
+  // Filter products based on search input
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div
+      className={`min-h-screen ${
+        theme === "dark" ? "bg-black text-white" : "bg-white text-black"
+      }`}
+    >
+      {/* Heading Section */}
+      <div className="py-10 text-center">
+        <h1 className="text-4xl font-extrabold tracking-wide">
+          Best Deals on Medicines
+        </h1>
+        <div className="mt-4 flex justify-center">
+          <input
+            type="text"
+            placeholder="Search Medicines"
+            className={`px-4 py-2 w-96 rounded-md border-2 ${
+              theme === "dark"
+                ? "text-black border-yellow-400 focus:ring-yellow-300"
+                : "text-black border-blue-400 focus:ring-blue-300"
+            } focus:outline-none focus:ring-2`}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* Products Section */}
+      <div className="container mx-auto px-4 py-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {filteredProducts.map((product) => (
+            <div
+              key={product.id}
+              className={`border p-4 rounded-lg shadow-md ${
+                theme === "dark"
+                  ? "bg-gray-800 border-gray-700 text-white"
+                  : "bg-gray-100 border-gray-300 text-black"
+              }`}
+            >
+              {/* Product Image */}
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-40 object-cover rounded-md"
+              />
+
+              {/* Product Title */}
+              <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
+
+              {/* Rating */}
+              <div className="flex items-center space-x-1 mt-1">
+                <div className="bg-green-600 text-white text-xs px-2 py-0.5 rounded-sm flex items-center">
+                  {product.rating} <FaStar className="ml-1 text-xs" />
+                </div>
+                <p className="text-gray-400 text-sm">({product.reviews})</p>
+              </div>
+
+              {/* Pricing */}
+              <div className="flex items-center space-x-2 mt-2">
+                <p className="text-green-400 font-bold text-lg">
+                  {product.price}
+                </p>
+                <p className="text-gray-500 line-through text-sm">
+                  {product.originalPrice}
+                </p>
+                <p className="text-green-500 text-sm font-semibold">
+                  {product.discount}
+                </p>
+              </div>
+
+              {/* Add to Cart Button */}
+              <button
+                onClick={() => addItemToCart(product)}
+                className="bg-yellow-500 text-black w-full py-2 mt-3 rounded-md font-semibold hover:bg-yellow-400"
+              >
+                Add to Cart
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Store;
