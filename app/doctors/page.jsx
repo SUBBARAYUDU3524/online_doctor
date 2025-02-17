@@ -1,6 +1,5 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { db } from "../firebaseConfig";
 import {
   collection,
   getDocs,
@@ -13,6 +12,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import UserContext from "../UserContext";
+import { db } from "../FirebaseConfig";
 
 const ChatApp = () => {
   const [userType, setUserType] = useState("");
