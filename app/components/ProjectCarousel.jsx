@@ -39,7 +39,7 @@ export default function ProjectCorousal() {
         }}
         loop={true} // Enable loop to go from last slide to the first seamlessly
         modules={[EffectCube, Pagination, Autoplay]}
-        className="mySwiper w-full max-w-lg h-96"
+        className="mySwiper w-full max-w-lg h-96 "
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>

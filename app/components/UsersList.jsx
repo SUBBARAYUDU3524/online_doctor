@@ -5,6 +5,7 @@ import { db } from "../FirebaseConfig";
 
 const UsersList = ({ onSelectUser, currentUser }) => {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -21,6 +22,7 @@ const UsersList = ({ onSelectUser, currentUser }) => {
         .filter((user) => user.id !== currentUser.uid); // Exclude current user
 
       setUsers(usersList);
+      setLoading(false);
     };
 
     fetchUsers();
@@ -39,40 +41,44 @@ const UsersList = ({ onSelectUser, currentUser }) => {
   };
 
   return (
-    <div className="h-full p-4 hidden md:block lg:block">
+    <div className="h-full p-4">
       <h2 className="text-xl font-bold mb-4">Users</h2>
-      <ul className="h-full md:overflow-y-auto">
-        {users.map((user) => (
-          <li
-            key={user.id}
-            className="p-2 cursor-pointer hover:bg-gray-300 flex items-center"
-            onClick={() => onSelectUser(user)}
-          >
-            <img
-              src={
-                user.profileImage ||
-                `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                  user.name
-                )}&background=random`
-              }
-              alt={user.name}
-              className="w-10 h-10 rounded-full mr-2"
-            />
-            <div>
-              <div className="flex items-center">
-                {user.username}
-                {user.online ? (
-                  <span className="ml-2 w-2 h-2 bg-green-500 rounded-full"></span>
-                ) : (
-                  <span className="ml-2 text-sm text-gray-500">
-                    {getLastSeen(user.lastSeen)}
-                  </span>
-                )}
+      {loading ? (
+        <div className="text-center">Loading...</div>
+      ) : (
+        <ul className="h-full overflow-y-auto">
+          {users.map((user) => (
+            <li
+              key={user.id}
+              className="p-2 cursor-pointer hover:bg-gray-300 flex items-center"
+              onClick={() => onSelectUser(user)}
+            >
+              <img
+                src={
+                  user.profileImage ||
+                  `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                    user.name
+                  )}&background=random`
+                }
+                alt={user.name}
+                className="w-10 h-10 rounded-full mr-2"
+              />
+              <div>
+                <div className="flex items-center">
+                  {user.username}
+                  {user.online ? (
+                    <span className="ml-2 w-2 h-2 bg-green-500 rounded-full"></span>
+                  ) : (
+                    <span className="ml-2 text-sm text-gray-500">
+                      {getLastSeen(user.lastSeen)}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

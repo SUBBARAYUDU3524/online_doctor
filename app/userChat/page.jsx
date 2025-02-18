@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import UsersList from "../components/UsersList";
 import Chat from "../components/Chat";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { FaArrowLeft } from "react-icons/fa"; // You can use any icon for the back arrow
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const MainComponent = () => {
@@ -33,30 +32,37 @@ const MainComponent = () => {
     <div className="flex h-screen">
       {/* Contacts List */}
       <div
-        className={`w-full md:w-1/4 h-full md:overflow-y-auto ${
+        className={`w-full lg:w-1/4 h-full lg:block ${
           showContacts ? "block" : "hidden"
         }`}
       >
-        <UsersList onSelectUser={setSelectedUser} currentUser={currentUser} />
+        <UsersList
+          onSelectUser={(user) => {
+            setSelectedUser(user);
+            setShowContacts(false); // Hide contacts on user select
+          }}
+          currentUser={currentUser}
+        />
       </div>
 
       {/* Chat Screen */}
       <div
-        className={`w-full md:w-3/4 h-full flex flex-col ${
-          selectedUser ? "block" : "hidden md:block"
+        className={`w-full lg:w-3/4 h-full flex flex-col ${
+          selectedUser ? "block" : "hidden lg:block"
         }`}
       >
         {selectedUser ? (
           <>
             {/* Back Arrow and Text */}
             {/* Back button for mobile screens */}
-            <div className="flex items-center">
+            <div className="flex items-center p-4 bg-gray-300 lg:hidden">
               <button
                 onClick={handleBackClick}
-                className={`md:hidden mr-4 text-xl `}
+                className={`lg:hidden mr-4 text-xl`}
               >
                 <AiOutlineArrowLeft />
               </button>
+              <h2 className="text-xl text-blue-700">Back to Users</h2>
             </div>
             <Chat selectedUser={selectedUser} currentUser={currentUser} />
           </>

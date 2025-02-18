@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../FirebaseConfig";
 import ThemeContext from "../ThemeContext";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const Chat = ({ selectedUser, currentUser }) => {
   const [conversationId, setConversationId] = useState(null);
@@ -126,7 +127,11 @@ const Chat = ({ selectedUser, currentUser }) => {
           {selectedUser?.username || "User"}
         </h2>
       </div>
-      <div className="flex-1 p-4 overflow-y-auto">
+      <div
+        className={`flex-1 p-4 overflow-y-auto ${
+          theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black"
+        }`}
+      >
         {messages.map((message) => (
           <div
             key={message.id}
@@ -150,17 +155,17 @@ const Chat = ({ selectedUser, currentUser }) => {
         ))}
         <div ref={messagesEndRef} />
       </div>
-      <div className="p-4 bg-gray-100 sticky bottom-0">
+      <div className="p-4 bg-gray-100 sticky bottom-0 flex items-center">
         <input
           type="text"
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded mr-2"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."
           disabled={isSending}
         />
         <button
-          className="mt-2 p-2 bg-blue-500 text-white rounded"
+          className="p-2 bg-blue-500 text-white rounded"
           onClick={sendMessage}
           disabled={isSending}
         >

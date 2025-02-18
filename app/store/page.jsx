@@ -1,6 +1,9 @@
 "use client";
 import React, { useState, useContext } from "react";
 import Image from "next/image";
+import { FaStar, FaShoppingCart, FaCreditCard } from "react-icons/fa"; // Import the cart and buy icons
+import ThemeContext from "../ThemeContext";
+import UserContext from "../UserContext";
 import product1 from "../assets/store1.jpg";
 import product2 from "../assets/store2.jpg";
 import product3 from "../assets/store3.jpg";
@@ -10,12 +13,10 @@ import product6 from "../assets/store6.jpg";
 import product7 from "../assets/store7.jpg";
 import product8 from "../assets/store8.jpg";
 import product9 from "../assets/store9.jpg";
-import UserContext from "../UserContext";
-import { FaStar } from "react-icons/fa";
-import ThemeContext from "../ThemeContext";
 
 const Store = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const { addItemToCart } = useContext(UserContext);
   const { theme } = useContext(ThemeContext);
 
@@ -30,6 +31,7 @@ const Store = () => {
       discount: "40% off",
       rating: 4.2,
       reviews: 1250,
+      description: "Effective relief for fever and mild to moderate pain.",
     },
     {
       id: 2,
@@ -40,6 +42,7 @@ const Store = () => {
       discount: "33% off",
       rating: 4.0,
       reviews: 980,
+      description: "Boost your immune system with these Vitamin C tablets.",
     },
     {
       id: 3,
@@ -50,6 +53,7 @@ const Store = () => {
       discount: "47% off",
       rating: 3.9,
       reviews: 700,
+      description: "Soothe your throat and alleviate cough with this syrup.",
     },
     {
       id: 4,
@@ -60,6 +64,7 @@ const Store = () => {
       discount: "32% off",
       rating: 4.5,
       reviews: 1600,
+      description: "Quick relief from muscle and joint pain with this spray.",
     },
     {
       id: 5,
@@ -70,6 +75,7 @@ const Store = () => {
       discount: "40% off",
       rating: 4.2,
       reviews: 1250,
+      description: "Effective relief for fever and mild to moderate pain.",
     },
     {
       id: 6,
@@ -80,6 +86,7 @@ const Store = () => {
       discount: "33% off",
       rating: 4.0,
       reviews: 980,
+      description: "Boost your immune system with these Vitamin C tablets.",
     },
     {
       id: 7,
@@ -90,6 +97,7 @@ const Store = () => {
       discount: "47% off",
       rating: 3.9,
       reviews: 700,
+      description: "Soothe your throat and alleviate cough with this syrup.",
     },
     {
       id: 8,
@@ -100,6 +108,7 @@ const Store = () => {
       discount: "32% off",
       rating: 4.5,
       reviews: 1600,
+      description: "Quick relief from muscle and joint pain with this spray.",
     },
     {
       id: 9,
@@ -110,6 +119,7 @@ const Store = () => {
       discount: "40% off",
       rating: 4.2,
       reviews: 1250,
+      description: "Effective relief for fever and mild to moderate pain.",
     },
     {
       id: 10,
@@ -120,6 +130,7 @@ const Store = () => {
       discount: "33% off",
       rating: 4.0,
       reviews: 980,
+      description: "Boost your immune system with these Vitamin C tablets.",
     },
     {
       id: 11,
@@ -130,6 +141,7 @@ const Store = () => {
       discount: "47% off",
       rating: 3.9,
       reviews: 700,
+      description: "Soothe your throat and alleviate cough with this syrup.",
     },
     {
       id: 12,
@@ -140,6 +152,7 @@ const Store = () => {
       discount: "32% off",
       rating: 4.5,
       reviews: 1600,
+      description: "Quick relief from muscle and joint pain with this spray.",
     },
     {
       id: 13,
@@ -150,6 +163,7 @@ const Store = () => {
       discount: "40% off",
       rating: 4.2,
       reviews: 1250,
+      description: "Effective relief for fever and mild to moderate pain.",
     },
     {
       id: 14,
@@ -160,6 +174,7 @@ const Store = () => {
       discount: "33% off",
       rating: 4.0,
       reviews: 980,
+      description: "Boost your immune system with these Vitamin C tablets.",
     },
     {
       id: 15,
@@ -170,6 +185,7 @@ const Store = () => {
       discount: "47% off",
       rating: 3.9,
       reviews: 700,
+      description: "Soothe your throat and alleviate cough with this syrup.",
     },
     {
       id: 16,
@@ -180,6 +196,7 @@ const Store = () => {
       discount: "32% off",
       rating: 4.5,
       reviews: 1600,
+      description: "Quick relief from muscle and joint pain with this spray.",
     },
   ];
 
@@ -187,6 +204,16 @@ const Store = () => {
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleAddToCart = (product) => {
+    addItemToCart(product);
+    setSelectedProduct(null); // Close modal
+  };
+
+  const handleBuyNow = (product) => {
+    setSelectedProduct(null); // Close modal
+    // Add buy now functionality here
+  };
 
   return (
     <div
@@ -222,11 +249,12 @@ const Store = () => {
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className={`border p-4 rounded-lg shadow-md ${
+              className={`border p-4 rounded-lg shadow-md cursor-pointer ${
                 theme === "dark"
                   ? "bg-black border-gray-700 text-white"
                   : "bg-gray-100 border-gray-300 text-black"
               }`}
+              onClick={() => setSelectedProduct(product)}
             >
               {/* Product Image */}
               <div className="w-full h-40 relative">
@@ -262,18 +290,84 @@ const Store = () => {
                   {product.discount}
                 </p>
               </div>
-
-              {/* Add to Cart Button */}
-              <button
-                onClick={() => addItemToCart(product)}
-                className="bg-yellow-500 text-black w-full py-2 mt-3 rounded-md font-semibold hover:bg-yellow-400"
-              >
-                Add to Cart
-              </button>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Product Modal */}
+      {selectedProduct && (
+        <div
+          className="fixed inset-0  bg-opacity-50 flex justify-center items-center z-50"
+          onClick={() => setSelectedProduct(null)}
+        >
+          <div
+            className={`bg-white dark:bg-gray-900 text-black dark:text-white rounded-lg p-6 w-11/12 md:w-2/3 lg:w-1/2 relative`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              className="absolute top-2 right-2 text-xl"
+              onClick={() => setSelectedProduct(null)}
+            >
+              &times;
+            </button>
+
+            {/* Modal Content */}
+            <div className="flex flex-col md:flex-row">
+              {/* Image Section */}
+              <div className="md:w-1/2 w-full h-64 relative mb-4 md:mb-0">
+                <Image
+                  src={selectedProduct.image}
+                  alt={selectedProduct.name}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-lg"
+                />
+              </div>
+
+              {/* Details Section */}
+              <div className="md:w-1/2 w-full md:pl-6">
+                <h2 className="text-2xl font-bold mb-2">
+                  {selectedProduct.name}
+                </h2>
+                <div className="flex items-center space-x-1 mb-2">
+                  <div className="bg-green-600 text-white text-xs px-2 py-0.5 rounded-sm flex items-center">
+                    {selectedProduct.rating} <FaStar className="ml-1 text-xs" />
+                  </div>
+                  <p className="text-gray-400 text-sm">
+                    ({selectedProduct.reviews} reviews)
+                  </p>
+                </div>
+                <p className="text-lg font-semibold mb-2">
+                  {selectedProduct.price}{" "}
+                  <span className="text-gray-500 line-through text-sm">
+                    {selectedProduct.originalPrice}
+                  </span>{" "}
+                  <span className="text-green-500 text-sm font-semibold">
+                    {selectedProduct.discount}
+                  </span>
+                </p>
+                <p className="mb-4">{selectedProduct.description}</p>
+                <div className="flex space-x-4">
+                  <button
+                    onClick={() => handleAddToCart(selectedProduct)}
+                    className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold py-2 px-4 rounded-md flex items-center"
+                  >
+                    <FaShoppingCart className="mr-2" /> Add to Cart
+                  </button>
+                  <button
+                    onClick={() => handleBuyNow(selectedProduct)}
+                    className="bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2 px-4 rounded-md flex items-center"
+                  >
+                    <FaCreditCard className="mr-2" /> Buy Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

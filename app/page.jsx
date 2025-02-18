@@ -93,7 +93,7 @@ const Page = () => {
         <motion.section
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.1 }}
           variants={{
             hidden: { opacity: 0, x: -50 },
             visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
@@ -109,7 +109,7 @@ const Page = () => {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: false, amount: 0.1 }}
               variants={{
                 hidden: { opacity: 0, x: -50 },
                 visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
@@ -129,7 +129,7 @@ const Page = () => {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: false, amount: 0.1 }}
               variants={{
                 hidden: { opacity: 0, x: 50 },
                 visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
@@ -175,7 +175,7 @@ const Page = () => {
         <motion.section
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.1 }}
           variants={{
             hidden: { opacity: 0, x: -50 },
             visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
@@ -242,7 +242,7 @@ const Page = () => {
             className="mt-8 flex justify-center"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
+            viewport={{ once: false, amount: 0.1 }}
             variants={{
               hidden: { opacity: 0, y: 30 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
@@ -261,7 +261,7 @@ const Page = () => {
         <motion.section
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.1 }}
           variants={{
             hidden: { opacity: 0, x: -50 },
             visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
@@ -272,12 +272,12 @@ const Page = () => {
               : "bg-white text-gray-900"
           }`}
         >
-          <div className="flex flex-col md:flex-row items-center gap-5">
+          <div className="flex flex-col md:flex-row items-center">
             {/* Left Side Image */}
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: false, amount: 0.1 }}
               variants={{
                 hidden: { opacity: 0, x: -50 },
                 visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
@@ -291,18 +291,18 @@ const Page = () => {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: false, amount: 0.1 }}
               variants={{
                 hidden: { opacity: 0, x: 50 },
                 visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
               }}
-              className="w-full md:w-1/2 space-y-4"
+              className="w-full md:w-1/2 "
             >
-              <h2 className="text-3xl font-bold text-center mb-8">
+              <h2 className="text-3xl font-bold text-center mb-5">
                 About Our Team
               </h2>
 
-              <h3 className="text-2xl font-semibold mb-2">
+              <h3 className="text-2xl font-semibold mb-2 text-center">
                 Innovating the Future with Technology
               </h3>
               <p className="text-lg">
@@ -324,7 +324,7 @@ const Page = () => {
               <div className="flex justify-center pb-4">
                 <motion.button
                   whileHover={{ scale: 1.1 }}
-                  className="px-6 py-3 pb-4 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition-all duration-300"
+                  className="px-6 py-3 pb-4 mt-3 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition-all duration-300"
                 >
                   View Our Team
                 </motion.button>

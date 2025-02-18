@@ -19,27 +19,27 @@ const Carousel = () => {
   const images = [
     {
       src: doctor,
-      title: "Slide 1",
-      subtitle: "This is the first slide subtitle",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet.",
+      title: "Online Ayurvedic Doctor: Healing Naturally with Ancient Wisdom",
+      subtitle: "A Holistic Approach to Health and Wellness",
+      text: "Ayurveda, an ancient system of natural healing, focuses on balancing the body, mind, and spirit. With the rise of online healthcare, consulting an Ayurvedic doctor has become more convenient, providing expert guidance on personalized treatments, herbal remedies, and lifestyle modifications from the comfort of your home.",
     },
     {
       src: doctor1,
-      title: "Slide 2",
-      subtitle: "This is the second slide subtitle",
-      text: "Sed posuere consectetur est at lobortis. Aenean lacinia bibendum nulla sed consectetur.",
+      title: "Benefits of Online Ayurvedic Consultation",
+      subtitle: "Personalized and Natural Healing Solutions",
+      text: "Online Ayurvedic consultations offer customized treatment plans based on an individual’s unique body constitution (Prakriti). By understanding the root cause of ailments, Ayurvedic doctors suggest herbal medicines, dietary changes, and yoga practices that enhance overall well-being. These consultations are beneficial for managing chronic conditions like stress, digestive issues, skin disorders, and lifestyle-related diseases.",
     },
     {
       src: doctor2,
-      title: "Slide 3",
-      subtitle: "This is the third slide subtitle",
-      text: "Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra.",
+      title: "Choosing the Right Ayurvedic Doctor Online",
+      subtitle: "Ensuring Authentic and Certified Expertise",
+      text: "Finding a reliable online Ayurvedic doctor requires checking their qualifications, experience, and patient reviews. Reputable platforms provide certified professionals who offer virtual consultations, assess medical history, and recommend safe and effective treatments. Opting for a trusted Ayurvedic expert ensures holistic healing without side effects, promoting long-term wellness and balance.",
     },
     {
       src: doctor3,
-      title: "Slide 4",
-      subtitle: "This is the fourth slide subtitle",
-      text: "Vestibulum id ligula porta felis euismod semper. Donec ullamcorper nulla non metus auctor.",
+      title: "Embrace Ayurveda Online: Natural Healing at Your Fingertips",
+      subtitle: "Traditional Wisdom Meets Modern Convenience",
+      text: "Ayurveda, the science of life, offers a natural and holistic approach to health and well-being. With online Ayurvedic consultations, people can now access expert guidance from qualified practitioners without the need for physical visits. These consultations provide personalized treatments, herbal remedies, and lifestyle modifications tailored to individual health needs.",
     },
   ];
   return (
@@ -78,7 +78,7 @@ const Carousel = () => {
             <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center bg-black bg-opacity-50">
               <h2 className="text-3xl font-bold mb-2">{image.title}</h2>
               <h3 className="text-xl mb-4">{image.subtitle}</h3>
-              <p className="px-4">{image.text}</p>
+              <p className="px-20">{image.text}</p>
             </div>
           </div>
         </SwiperSlide>

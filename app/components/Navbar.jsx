@@ -78,6 +78,14 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // Toggle theme and close mobile menu if open
+  const handleThemeToggle = () => {
+    toggleTheme();
+    if (isMobileMenuOpen) {
+      toggleMobileMenu();
+    }
+  };
+
   return (
     <nav
       className={`bg-white text-gray-900 py-6 px-8 shadow-md sticky top-0 z-50 ${
@@ -122,7 +130,7 @@ const Navbar = () => {
           ))}
 
           {/* Theme Toggle Button */}
-          <button onClick={toggleTheme} className="text-2xl">
+          <button onClick={handleThemeToggle} className="text-2xl">
             {theme === "dark" ? (
               <FaSun className="text-yellow-400" />
             ) : (
@@ -200,7 +208,15 @@ const Navbar = () => {
             </div>
           ) : (
             <Link href="/login">
-              <span className="text-xl font-semibold ">Login</span>
+              <span
+                className="text-xl font-semibold"
+                onClick={() => {
+                  setActiveLink("login");
+                  toggleMobileMenu(); // Close menu on click
+                }}
+              >
+                Login
+              </span>
             </Link>
           )}
         </div>
@@ -226,17 +242,16 @@ const Navbar = () => {
               : "bg-white text-gray-900"
           } w-[70%] md:w-[40%]`} // Set width to 80% on small screens, 50% on medium screens
         >
-          <div className="flex flex-col  h-full px-8 py-6 overflow-y-auto">
+          <div className="flex flex-col h-full px-8 py-6 overflow-y-auto">
             {/* Theme Toggle Button in Blue Background */}
-
             <div
-              className={`flex justify-end  p-2 ${
+              className={`flex justify-end p-2 ${
                 theme === "dark"
                   ? "bg-gray-600 text white"
                   : "bg-blue-200 text-black"
               }`}
             >
-              <button onClick={toggleTheme} className="text-2xl">
+              <button onClick={handleThemeToggle} className="text-2xl">
                 {theme === "dark" ? (
                   <FaSun className="text-yellow-400" />
                 ) : (
@@ -244,9 +259,10 @@ const Navbar = () => {
                 )}
               </button>
             </div>
+
             {/* User Profile Section */}
             <div
-              className={`p-4  mb-4 ${
+              className={`p-4 mb-4 ${
                 theme === "dark"
                   ? "bg-gray-600 text white"
                   : "bg-blue-200 text-black"
@@ -288,7 +304,10 @@ const Navbar = () => {
                     className={`text-xl font-semibold ${
                       activeLink === "login" ? "text-blue-400" : "text-gray-900"
                     }`}
-                    onClick={() => setActiveLink("login")}
+                    onClick={() => {
+                      setActiveLink("login");
+                      toggleMobileMenu(); // Close menu on click
+                    }}
                   >
                     Login
                   </span>
@@ -358,7 +377,7 @@ const Navbar = () => {
               <Link href="/userChat">
                 <span
                   className={`flex items-center py-4 text-xl md:text-2xl font-semibold ${
-                    activeLink === "services"
+                    activeLink === "userChat"
                       ? "text-blue-400"
                       : theme === "dark"
                       ? "text-white" // White text in dark mode
