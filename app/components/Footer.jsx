@@ -33,9 +33,6 @@ const Footer = () => {
                   <MdEmail className="mr-2 mt-1" />
                   <p>onlinedoctorsupport@gmail.com</p>
                 </div>
-                <div className="flex items-start mb-2">
-                  <MdPhone className="mr-2 mt-1" />
-                </div>
               </div>
 
               {/* Explore Links */}
