@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import Link from "next/link";
 import { signOut } from "firebase/auth";
 import {
-  FaEdit,
   FaBars,
   FaTimes,
   FaHome,
@@ -13,13 +12,13 @@ import {
   FaEnvelope,
   FaMoon,
   FaSun,
-  FaShoppingCart, // Import the cart icon
-} from "react-icons/fa"; // Added FaBars and FaTimes for mobile toggle
+  FaShoppingCart,
+  FaSpinner,
+} from "react-icons/fa";
 import Image from "next/image";
-
 import { useRouter } from "next/navigation";
 import ThemeContext from "../ThemeContext";
-import { motion, AnimatePresence } from "framer-motion"; // Import framer-motion for animations
+import { motion, AnimatePresence } from "framer-motion";
 import UserContext from "../UserContext";
 import { auth } from "../FirebaseConfig";
 
@@ -28,35 +27,40 @@ const Navbar = () => {
   const [activeLink, setActiveLink] = useState("home");
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // For mobile menu
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const modalRef = useRef(null);
-  const { currentUser, cartItems } = useContext(UserContext);
+  const { currentUser, cartItems, userType } = useContext(UserContext);
 
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
-      setIsModalOpen(false); // Close modal when clicking outside
+      setIsModalOpen(false);
     }
   };
 
-  // Check the authentication state and set the current user
-
-  // Handle user sign out
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      if (localStorage.getItem("userType")) {
+        localStorage.removeItem("userType");
+      }
+      if (localStorage.getItem("userToken")) {
+        localStorage.removeItem("userToken");
+      }
+      if (localStorage.getItem("doctorToken")) {
+        localStorage.removeItem("doctorToken");
+      }
+
       router.push("/login");
     } catch (error) {
       console.error("Error logging out:", error);
     }
   };
 
-  // Toggle modal visibility
   const toggleModal = () => {
     setIsModalOpen((prevState) => !prevState);
-    console.log("Modal state after toggle:", !isModalOpen);
   };
 
-  // Close modal when clicking outside of it
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -73,18 +77,36 @@ const Navbar = () => {
     };
   }, [isModalOpen]);
 
-  // Toggle mobile menu
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Toggle theme and close mobile menu if open
   const handleThemeToggle = () => {
     toggleTheme();
     if (isMobileMenuOpen) {
       toggleMobileMenu();
     }
   };
+
+  useEffect(() => {
+    const handleRouteChangeStart = () => {
+      setIsLoading(true);
+    };
+
+    const handleRouteChangeComplete = () => {
+      setIsLoading(false);
+    };
+
+    router.events?.on("routeChangeStart", handleRouteChangeStart);
+    router.events?.on("routeChangeComplete", handleRouteChangeComplete);
+    router.events?.on("routeChangeError", handleRouteChangeComplete);
+
+    return () => {
+      router.events?.off("routeChangeStart", handleRouteChangeStart);
+      router.events?.off("routeChangeComplete", handleRouteChangeComplete);
+      router.events?.off("routeChangeError", handleRouteChangeComplete);
+    };
+  }, [router]);
 
   return (
     <nav
@@ -96,31 +118,21 @@ const Navbar = () => {
     >
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-3xl font-bold ">
-          <Link href="/">ONLINE DOCTOR SERVICE</Link>
+          <Link href="/"> 🧑‍⚕️ONLINE DOCTOR</Link>
         </div>
 
-        {/* Desktop Menu - Show on Large Screens */}
         <div className="hidden md:flex space-x-8 items-center relative">
-          {/* Navigation Links */}
-          {[
-            "home",
-            "store",
-            "services",
-            "userChat",
-            "aiDoctor",
-            "doctors",
-            "contact",
-          ].map((link) => (
+          {["home", "store", "services", "contact"].map((link) => (
             <Link href={link === "home" ? "/" : `/${link}`} key={link}>
               <span
                 className={`text-xl font-semibold ${
                   activeLink === link
                     ? theme === "dark"
-                      ? "text-blue-400" // Active link color in dark theme
-                      : "text-blue-600" // Active link color in light theme
+                      ? "text-blue-400"
+                      : "text-blue-600"
                     : theme === "dark"
-                    ? "text-white" // Inactive link color in dark theme
-                    : "text-gray-900" // Inactive link color in light theme
+                    ? "text-white"
+                    : "text-gray-900"
                 }`}
                 onClick={() => setActiveLink(link)}
               >
@@ -129,7 +141,82 @@ const Navbar = () => {
             </Link>
           ))}
 
-          {/* Theme Toggle Button */}
+          {currentUser && userType === "user" && (
+            <Link href="/userChat">
+              <span
+                className={`text-xl font-semibold ${
+                  activeLink === "userChat"
+                    ? theme === "dark"
+                      ? "text-blue-400"
+                      : "text-blue-600"
+                    : theme === "dark"
+                    ? "text-white"
+                    : "text-gray-900"
+                }`}
+                onClick={() => setActiveLink("userChat")}
+              >
+                User Chat
+              </span>
+            </Link>
+          )}
+
+          {currentUser && userType === "doctor" && (
+            <Link href="/doctorchat">
+              <span
+                className={`text-xl font-semibold ${
+                  activeLink === "doctorchat"
+                    ? theme === "dark"
+                      ? "text-blue-400"
+                      : "text-blue-600"
+                    : theme === "dark"
+                    ? "text-white"
+                    : "text-gray-900"
+                }`}
+                onClick={() => setActiveLink("doctorchat")}
+              >
+                Doctor Chat
+              </span>
+            </Link>
+          )}
+
+          {currentUser && (
+            <>
+              <Link href="/aiDoctor">
+                <span
+                  className={`text-xl font-semibold ${
+                    activeLink === "aiDoctor"
+                      ? theme === "dark"
+                        ? "text-blue-400"
+                        : "text-blue-600"
+                      : theme === "dark"
+                      ? "text-white"
+                      : "text-gray-900"
+                  }`}
+                  onClick={() => setActiveLink("aiDoctor")}
+                >
+                  AI Doctor
+                </span>
+              </Link>
+
+              <Link href="/doctors">
+                <span
+                  className={`text-xl font-semibold ${
+                    activeLink === "doctors"
+                      ? theme === "dark"
+                        ? "text-blue-400"
+                        : "text-blue-600"
+                      : theme === "dark"
+                      ? "text-white"
+                      : "text-gray-900"
+                  }`}
+                  onClick={() => setActiveLink("doctors")}
+                >
+                  Doctors
+                </span>
+              </Link>
+            </>
+          )}
+
           <button onClick={handleThemeToggle} className="text-2xl">
             {theme === "dark" ? (
               <FaSun className="text-yellow-400" />
@@ -138,7 +225,6 @@ const Navbar = () => {
             )}
           </button>
 
-          {/* Cart Icon */}
           <div className="relative">
             <Link href="/cart">
               <FaShoppingCart className="text-2xl cursor-pointer" />
@@ -150,12 +236,10 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* User Profile */}
           {currentUser ? (
             <div className="relative">
-              {/* Profile Image */}
               <Image
-                onClick={toggleModal} // Open modal on click
+                onClick={toggleModal}
                 src={
                   currentUser?.photoURL ||
                   "https://cdn-icons-png.flaticon.com/128/3177/3177440.png"
@@ -166,7 +250,6 @@ const Navbar = () => {
                 height={40}
               />
 
-              {/* Modal positioned from the right end */}
               <AnimatePresence>
                 {isModalOpen && (
                   <motion.div
@@ -197,7 +280,7 @@ const Navbar = () => {
                       {currentUser?.email}
                     </p>
                     <button
-                      onClick={handleLogout} // Define handleLogout as needed
+                      onClick={handleLogout}
                       className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors duration-300"
                     >
                       Logout
@@ -212,7 +295,7 @@ const Navbar = () => {
                 className="text-xl font-semibold"
                 onClick={() => {
                   setActiveLink("login");
-                  toggleMobileMenu(); // Close menu on click
+                  toggleMobileMenu();
                 }}
               >
                 Login
@@ -221,7 +304,6 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Menu Button - Show on Small and Medium Screens */}
         <div className="md:hidden">
           <button onClick={toggleMobileMenu}>
             {isMobileMenuOpen ? (
@@ -232,7 +314,6 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Fullscreen Mobile Navigation - Visible on Small and Medium Screens */}
         <div
           className={`fixed inset-0 transform ${
             isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
@@ -240,10 +321,9 @@ const Navbar = () => {
             theme === "dark"
               ? "bg-gray-900 text-white"
               : "bg-white text-gray-900"
-          } w-[70%] md:w-[40%]`} // Set width to 80% on small screens, 50% on medium screens
+          } w-[70%] md:w-[40%]`}
         >
           <div className="flex flex-col h-full px-8 py-6 overflow-y-auto">
-            {/* Theme Toggle Button in Blue Background */}
             <div
               className={`flex justify-end p-2 ${
                 theme === "dark"
@@ -260,7 +340,6 @@ const Navbar = () => {
               </button>
             </div>
 
-            {/* User Profile Section */}
             <div
               className={`p-4 mb-4 ${
                 theme === "dark"
@@ -268,12 +347,8 @@ const Navbar = () => {
                   : "bg-blue-200 text-black"
               }`}
             >
-              {" "}
-              {/* Different color for user section */}
               {currentUser ? (
                 <div className="flex flex-col items-center space-y-2">
-                  {" "}
-                  {/* Use flex-col for vertical stacking */}
                   <Image
                     onClick={toggleModal}
                     src={
@@ -306,7 +381,7 @@ const Navbar = () => {
                     }`}
                     onClick={() => {
                       setActiveLink("login");
-                      toggleMobileMenu(); // Close menu on click
+                      toggleMobileMenu();
                     }}
                   >
                     Login
@@ -315,7 +390,6 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Navigation Links */}
             <div className="flex flex-col">
               <Link href="/">
                 <span
@@ -323,15 +397,15 @@ const Navbar = () => {
                     activeLink === "home"
                       ? "text-blue-400"
                       : theme === "dark"
-                      ? "text-white" // White text in dark mode
+                      ? "text-white"
                       : "text-gray-900"
                   }`}
                   onClick={() => {
                     setActiveLink("home");
-                    toggleMobileMenu(); // Close menu on click
+                    toggleMobileMenu();
                   }}
                 >
-                  <FaHome className="mr-2" /> {/* Icon for Home */}
+                  <FaHome className="mr-2" />
                   Home
                 </span>
               </Link>
@@ -342,15 +416,15 @@ const Navbar = () => {
                     activeLink === "store"
                       ? "text-blue-400"
                       : theme === "dark"
-                      ? "text-white" // White text in dark mode
+                      ? "text-white"
                       : "text-gray-900"
                   }`}
                   onClick={() => {
                     setActiveLink("store");
-                    toggleMobileMenu(); // Close menu on click
+                    toggleMobileMenu();
                   }}
                 >
-                  <FaInfoCircle className="mr-2" /> {/* Icon for About Us */}
+                  <FaInfoCircle className="mr-2" />
                   Online Store
                 </span>
               </Link>
@@ -361,77 +435,102 @@ const Navbar = () => {
                     activeLink === "services"
                       ? "text-blue-400"
                       : theme === "dark"
-                      ? "text-white" // White text in dark mode
+                      ? "text-white"
                       : "text-gray-900"
                   }`}
                   onClick={() => {
                     setActiveLink("services");
-                    toggleMobileMenu(); // Close menu on click
+                    toggleMobileMenu();
                   }}
                 >
-                  <FaServicestack className="mr-2" /> {/* Icon for Services */}
+                  <FaServicestack className="mr-2" />
                   Services
                 </span>
               </Link>
 
-              <Link href="/userChat">
-                <span
-                  className={`flex items-center py-4 text-xl md:text-2xl font-semibold ${
-                    activeLink === "userChat"
-                      ? "text-blue-400"
-                      : theme === "dark"
-                      ? "text-white" // White text in dark mode
-                      : "text-gray-900"
-                  }`}
-                  onClick={() => {
-                    setActiveLink("userchat");
-                    toggleMobileMenu(); // Close menu on click
-                  }}
-                >
-                  <FaServicestack className="mr-2" /> {/* Icon for Services */}
-                  UserChat
-                </span>
-              </Link>
+              {currentUser && userType === "user" && (
+                <Link href="/userChat">
+                  <span
+                    className={`flex items-center py-4 text-xl md:text-2xl font-semibold ${
+                      activeLink === "userChat"
+                        ? "text-blue-400"
+                        : theme === "dark"
+                        ? "text-white"
+                        : "text-gray-900"
+                    }`}
+                    onClick={() => {
+                      setActiveLink("userChat");
+                      toggleMobileMenu();
+                    }}
+                  >
+                    <FaServicestack className="mr-2" />
+                    User Chat
+                  </span>
+                </Link>
+              )}
 
-              <Link href="/aiDoctor">
-                <span
-                  className={`flex items-center py-4 text-xl md:text-2xl font-semibold ${
-                    activeLink === "Consultant"
-                      ? "text-blue-400"
-                      : theme === "dark"
-                      ? "text-white" // White text in dark mode
-                      : "text-gray-900"
-                  }`}
-                  onClick={() => {
-                    setActiveLink("aidoctor");
-                    toggleMobileMenu(); // Close menu on click
-                  }}
-                >
-                  <FaProjectDiagram className="mr-2" />{" "}
-                  {/* Icon for Projects */}
-                  AiDoctor
-                </span>
-              </Link>
+              {currentUser && userType === "doctor" && (
+                <Link href="/doctorchat">
+                  <span
+                    className={`flex items-center py-4 text-xl md:text-2xl font-semibold ${
+                      activeLink === "doctorchat"
+                        ? "text-blue-400"
+                        : theme === "dark"
+                        ? "text-white"
+                        : "text-gray-900"
+                    }`}
+                    onClick={() => {
+                      setActiveLink("doctorchat");
+                      toggleMobileMenu();
+                    }}
+                  >
+                    <FaServicestack className="mr-2" />
+                    Doctor Chat
+                  </span>
+                </Link>
+              )}
 
-              <Link href="/doctors">
-                <span
-                  className={`flex items-center py-4 text-xl md:text-2xl font-semibold ${
-                    activeLink === "Consultant"
-                      ? "text-blue-400"
-                      : theme === "dark"
-                      ? "text-white" // White text in dark mode
-                      : "text-gray-900"
-                  }`}
-                  onClick={() => {
-                    setActiveLink("doctors");
-                    toggleMobileMenu(); // Close menu on click
-                  }}
-                >
-                  <FaProjectDiagram className="mr-2" />{" "}
-                  {/* Icon for Projects */}
-                  Doctors
-                </span>
-              </Link>
+              {currentUser && (
+                <>
+                  <Link href="/aiDoctor">
+                    <span
+                      className={`flex items-center py-4 text-xl md:text-2xl font-semibold ${
+                        activeLink === "aiDoctor"
+                          ? "text-blue-400"
+                          : theme === "dark"
+                          ? "text-white"
+                          : "text-gray-900"
+                      }`}
+                      onClick={() => {
+                        setActiveLink("aiDoctor");
+                        toggleMobileMenu();
+                      }}
+                    >
+                      <FaProjectDiagram className="mr-2" />
+                      AI Doctor
+                    </span>
+                  </Link>
+
+                  <Link href="/doctors">
+                    <span
+                      className={`flex items-center py-4 text-xl md:text-2xl font-semibold ${
+                        activeLink === "doctors"
+                          ? "text-blue-400"
+                          : theme === "dark"
+                          ? "text-white"
+                          : "text-gray-900"
+                      }`}
+                      onClick={() => {
+                        setActiveLink("doctors");
+                        toggleMobileMenu();
+                      }}
+                    >
+                      <FaProjectDiagram className="mr-2" />
+                      Doctors
+                    </span>
+                  </Link>
+                </>
+              )}
 
               <Link href="/contact">
                 <span
@@ -439,15 +538,15 @@ const Navbar = () => {
                     activeLink === "contact"
                       ? "text-blue-400"
                       : theme === "dark"
-                      ? "text-white" // White text in dark mode
+                      ? "text-white"
                       : "text-gray-900"
                   }`}
                   onClick={() => {
                     setActiveLink("contact");
-                    toggleMobileMenu(); // Close menu on click
+                    toggleMobileMenu();
                   }}
                 >
-                  <FaEnvelope className="mr-2" /> {/* Icon for Contact Us */}
+                  <FaEnvelope className="mr-2" />
                   Contact Us
                 </span>
               </Link>
@@ -455,6 +554,12 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <FaSpinner className="text-white text-4xl animate-spin" />
+        </div>
+      )}
     </nav>
   );
 };

@@ -29,7 +29,7 @@ const SplashScreen = () => {
           },
         }}
       >
-        ONLINE DOCTOR
+        🧑‍⚕️ONLINE DOCTOR
       </h1>
     </div>
   );

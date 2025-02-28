@@ -228,7 +228,8 @@ const ChatApp = () => {
                   <div className="flex flex-col">
                     <span className="font-medium text-lg">{displayName}</span>
                     <span className="text-sm text-gray-500">
-                      {contact.data.specialization} Specialist
+                      {contact.data.specialization &&
+                        `${contact.data.specialization} specialist`}
                     </span>
                   </div>
                 </div>

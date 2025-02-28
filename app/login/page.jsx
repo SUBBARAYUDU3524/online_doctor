@@ -15,33 +15,72 @@ import { motion } from "framer-motion";
 import login from "../assets/home1.jpg";
 import ThemeContext from "../ThemeContext";
 import { auth } from "../FirebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../FirebaseConfig"; // Import Firebase Firestore
 
 export default function Login() {
   const { theme } = useContext(ThemeContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  const storeToken = async (uid) => {
+    const userDocRef = doc(db, "users", uid);
+    const doctorDocRef = doc(db, "doctors", uid);
+
+    const userDocSnap = await getDoc(userDocRef);
+    const doctorDocSnap = await getDoc(doctorDocRef);
+
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+      const token = userData.uid;
+      localStorage.setItem("userToken", token);
+      localStorage.setItem("userType", "user");
+    } else if (doctorDocSnap.exists()) {
+      const doctorData = doctorDocSnap.data();
+      const token = doctorData.uid;
+      localStorage.setItem("doctorToken", token);
+      localStorage.setItem("userType", "doctor");
+    } else {
+      console.error("No such document!");
+    }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const uid = userCredential.user.uid;
+      await storeToken(uid);
       toast.success("Login successful! Redirecting...");
       router.push("/"); // Redirect to dashboard or another page after successful login
     } catch (error) {
       setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
+    setIsLoading(true);
     try {
-      await signInWithPopup(auth, provider);
+      const userCredential = await signInWithPopup(auth, provider);
+      const uid = userCredential.user.uid;
+      await storeToken(uid);
       toast.success("Login successful! Redirecting...");
       router.push("/"); // Redirect after successful Google sign-in
     } catch (error) {
       setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -144,8 +183,9 @@ export default function Login() {
                 <button
                   type="submit"
                   className="w-full bg-blue-600 text-white  py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={isLoading} // Disable button when loading
                 >
-                  Login
+                  {isLoading ? "Logging in..." : "Login"}
                 </button>
               </form>
               <hr className="my-6 border-gray-300" />
@@ -153,6 +193,7 @@ export default function Login() {
                 <button
                   onClick={handleGoogleSignIn}
                   className="w-full  py-2 rounded-md border border-gray-300 flex items-center justify-center "
+                  disabled={isLoading} // Disable button when loading
                 >
                   <Image
                     src="https://cdn-icons-png.flaticon.com/128/281/281764.png"
@@ -161,7 +202,7 @@ export default function Login() {
                     width={24}
                     height={24}
                   />
-                  Sign In with Google
+                  {isLoading ? "Signing in..." : "Sign In with Google"}
                 </button>
               </div>
               <p className="text-center ">

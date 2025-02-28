@@ -26,7 +26,7 @@ const Store = () => {
       id: 1,
       name: "Paracetamol",
       image: product3,
-      price: "₹120",
+      price: 120,
       originalPrice: "₹200",
       discount: "40% off",
       rating: 4.2,
@@ -37,7 +37,7 @@ const Store = () => {
       id: 2,
       name: "Vitamin C Tablets",
       image: product2,
-      price: "₹120",
+      price: 120,
       originalPrice: "₹180",
       discount: "33% off",
       rating: 4.0,
@@ -48,7 +48,7 @@ const Store = () => {
       id: 3,
       name: "Cough Syrup",
       image: product1,
-      price: "₹80",
+      price: 80,
       originalPrice: "₹150",
       discount: "47% off",
       rating: 3.9,
@@ -59,7 +59,7 @@ const Store = () => {
       id: 4,
       name: "Pain Relief Spray",
       image: product4,
-      price: "₹150",
+      price: 150,
       originalPrice: "₹220",
       discount: "32% off",
       rating: 4.5,
@@ -70,7 +70,7 @@ const Store = () => {
       id: 5,
       name: "Paracetamol",
       image: product5,
-      price: "₹120",
+      price: 120,
       originalPrice: "₹200",
       discount: "40% off",
       rating: 4.2,
@@ -81,7 +81,7 @@ const Store = () => {
       id: 6,
       name: "Vitamin C Tablets",
       image: product6,
-      price: "₹120",
+      price: 120,
       originalPrice: "₹180",
       discount: "33% off",
       rating: 4.0,
@@ -92,7 +92,7 @@ const Store = () => {
       id: 7,
       name: "Cough Syrup",
       image: product7,
-      price: "₹80",
+      price: 80,
       originalPrice: "₹150",
       discount: "47% off",
       rating: 3.9,
@@ -103,7 +103,7 @@ const Store = () => {
       id: 8,
       name: "Pain Relief Spray",
       image: product8,
-      price: "₹150",
+      price: 150,
       originalPrice: "₹220",
       discount: "32% off",
       rating: 4.5,
@@ -114,7 +114,7 @@ const Store = () => {
       id: 9,
       name: "Paracetamol",
       image: product9,
-      price: "₹120",
+      price: 120,
       originalPrice: "₹200",
       discount: "40% off",
       rating: 4.2,
@@ -125,7 +125,7 @@ const Store = () => {
       id: 10,
       name: "Vitamin C Tablets",
       image: product1,
-      price: "₹120",
+      price: 120,
       originalPrice: "₹180",
       discount: "33% off",
       rating: 4.0,
@@ -136,7 +136,7 @@ const Store = () => {
       id: 11,
       name: "Cough Syrup",
       image: product1,
-      price: "₹80",
+      price: 80,
       originalPrice: "₹150",
       discount: "47% off",
       rating: 3.9,
@@ -147,7 +147,7 @@ const Store = () => {
       id: 12,
       name: "Pain Relief Spray",
       image: product2,
-      price: "₹150",
+      price: 150,
       originalPrice: "₹220",
       discount: "32% off",
       rating: 4.5,
@@ -158,7 +158,7 @@ const Store = () => {
       id: 13,
       name: "Paracetamol",
       image: product4,
-      price: "₹120",
+      price: 120,
       originalPrice: "₹200",
       discount: "40% off",
       rating: 4.2,
@@ -169,7 +169,7 @@ const Store = () => {
       id: 14,
       name: "Vitamin C Tablets",
       image: product3,
-      price: "₹120",
+      price: 120,
       originalPrice: "₹180",
       discount: "33% off",
       rating: 4.0,
@@ -180,7 +180,7 @@ const Store = () => {
       id: 15,
       name: "Cough Syrup",
       image: product2,
-      price: "₹80",
+      price: 80,
       originalPrice: "₹150",
       discount: "47% off",
       rating: 3.9,
@@ -191,7 +191,7 @@ const Store = () => {
       id: 16,
       name: "Pain Relief Spray",
       image: product1,
-      price: "₹150",
+      price: 150,
       originalPrice: "₹220",
       discount: "32% off",
       rating: 4.5,
@@ -281,7 +281,7 @@ const Store = () => {
               {/* Pricing */}
               <div className="flex items-center space-x-2 mt-2">
                 <p className="text-green-400 font-bold text-lg">
-                  {product.price}
+                  ₹{product.price}
                 </p>
                 <p className="text-gray-500 line-through text-sm">
                   {product.originalPrice}
@@ -340,7 +340,7 @@ const Store = () => {
                   </p>
                 </div>
                 <p className="text-lg font-semibold mb-2">
-                  {selectedProduct.price}{" "}
+                  ₹{selectedProduct.price}{" "}
                   <span className="text-gray-500 line-through text-sm">
                     {selectedProduct.originalPrice}
                   </span>{" "}

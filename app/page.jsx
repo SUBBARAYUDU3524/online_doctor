@@ -12,10 +12,12 @@ import imgTree from "./assets/home1.jpg"; // Replace with your image import
 import Image from "next/image";
 import ProjectCorousal from "./components/ProjectCarousel";
 import { FaUserMd } from "react-icons/fa";
+import UserContext from "./UserContext";
 
 const Page = () => {
   const { theme } = useContext(ThemeContext);
-
+  const { currentUser } = useContext(UserContext);
+  console.log(currentUser, "cuurentuser");
   return (
     <>
       <div
@@ -40,13 +42,13 @@ const Page = () => {
           <h1 className="text-xl md:text-2xl font-bold mb-4 flex justify-center items-center lg:text-3xl">
             <TypeAnimation
               sequence={[
-                "Welcome to ONLINE DOCTOR", // Sentence 1
+                "Welcome to Online Doctor", // Sentence 1
                 5000, // Show for 5s
-                "Innovating the Future with Technology", // Sentence 2
+                "Innovating Healthcare with Technology", // Sentence 2
                 3000, // Show for 3s
-                "Empowering Businesses with Tech Solutions", // Sentence 3
+                "24/7 Medical Consultations ", // Sentence 3
                 4000, // Show for 4s
-                "Your Digital Transformation Partner", // Sentence 4
+                "AI-Powered Health Monitoring", // Sentence 4
                 3000, // Show for 3s
               ]}
               wrapper="span"
@@ -69,7 +71,7 @@ const Page = () => {
 
           {/* Subtitle Text with Tailwind styling */}
           <p className="text-lg md:text-2xl mb-8">
-            Your source for tech solutions, insights, and innovation.
+            Innovating Healthcare with Technology
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -431,7 +433,7 @@ const Page = () => {
           <Footer />
           {/* Gemini Icon */}
           <motion.a
-            href="/doctors"
+            href="/aiDoctor"
             className="fixed right-4 mr-10 bottom-4 md:bottom-8 md:right-8 bg-blue-600 p-4 rounded-full shadow-lg text-white hover:bg-blue-700 z-50"
             whileHover={{ scale: 1.1 }}
             title="Doctor"
