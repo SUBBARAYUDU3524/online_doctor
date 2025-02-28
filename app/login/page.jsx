@@ -75,7 +75,7 @@ export default function Login() {
       const userCredential = await signInWithPopup(auth, provider);
       const uid = userCredential.user.uid;
       await storeToken(uid);
-      toast.success("Login successful! Redirecting...");
+      toast.success("Login successful! Redirecting.....");
       router.push("/"); // Redirect after successful Google sign-in
     } catch (error) {
       setError(error.message);
