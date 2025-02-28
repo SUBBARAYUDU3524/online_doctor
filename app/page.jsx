@@ -433,7 +433,7 @@ const Page = () => {
           <Footer />
           {/* Gemini Icon */}
           <motion.a
-            href="/aiDoctor"
+            href="/login"
             className="fixed right-4 mr-10 bottom-4 md:bottom-8 md:right-8 bg-blue-600 p-4 rounded-full shadow-lg text-white hover:bg-blue-700 z-50"
             whileHover={{ scale: 1.1 }}
             title="Doctor"
