@@ -27,18 +27,14 @@ const Footer = () => {
                 <h3 className="text-xl font-bold mb-3">Get In Touch</h3>
                 <div className="flex items-start mb-2">
                   <MdLocationOn className="mr-2 mt-1" />
-                  <p>
-                    235, 13th Cross Rd, Indira Nagar, Bengaluru, Karnataka
-                    560038
-                  </p>
+                  <p>235, 13th Cross Rd, Finland</p>
                 </div>
                 <div className="flex items-start mb-2">
                   <MdEmail className="mr-2 mt-1" />
-                  <p>support@.com</p>
+                  <p>onlinedoctorsupport@gmail.com</p>
                 </div>
                 <div className="flex items-start mb-2">
                   <MdPhone className="mr-2 mt-1" />
-                  <p>9731910827</p>
                 </div>
               </div>
 
